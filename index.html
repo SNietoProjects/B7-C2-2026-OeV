@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Tema 7 (Específico) — Ley 1/2015, Presupuestos de la Generalitat | Opositar en Valencia</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --naranja: #d97706; --naranja-claro: #fef3c7; --naranja-borde: #f59e0b;
+    --azul-oscuro: #1e293b; --texto: #374151; --texto-suave: #6b7280;
+    --borde: #e5e7eb; --fondo: #fafaf9; --blanco: #ffffff;
+    --verde: #166534; --verde-bg: #f0fdf4; --verde-borde: #86efac;
+    --rojo: #991b1b; --rojo-bg: #fef2f2; --rojo-borde: #fca5a5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Source Sans 3', sans-serif; background: var(--fondo); color: var(--texto); min-height: 100vh; font-size: 16px; line-height: 1.6; }
+  header { background: var(--blanco); border-bottom: 1px solid var(--borde); }
+  .header-top { max-width: 860px; margin: 0 auto; padding: 1.4rem 1.5rem 1rem; display: flex; align-items: flex-start; gap: 1.2rem; }
+  .header-logo { width: 48px; height: 48px; border-radius: 8px; object-fit: contain; flex-shrink: 0; }
+  .header-textos { flex: 1; }
+  .header-site { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--naranja); font-weight: 600; margin-bottom: 3px; }
+  .header-titulo { font-family: 'Lora', serif; font-size: clamp(1.1rem, 3vw, 1.6rem); font-weight: 700; color: var(--azul-oscuro); line-height: 1.2; }
+  .header-sub { font-size: 0.88rem; color: var(--texto-suave); margin-top: 4px; }
+  .header-meta { background: var(--naranja-claro); border-top: 1px solid #fde68a; padding: 0.55rem 1.5rem; }
+  .header-meta-inner { max-width: 860px; margin: 0 auto; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; font-size: 0.83rem; color: #92400e; font-weight: 500; }
+  .barra-wrap { position: sticky; top: 0; z-index: 100; background: var(--blanco); border-bottom: 1px solid var(--borde); padding: 0.6rem 1.5rem; box-shadow: 0 1px 6px rgba(0,0,0,0.05); }
+  .barra-inner { max-width: 860px; margin: 0 auto; display: flex; align-items: center; gap: 1rem; }
+  .barra-track { flex: 1; height: 6px; background: #f3f4f6; border-radius: 99px; overflow: hidden; }
+  .barra-fill { height: 100%; background: var(--naranja); border-radius: 99px; transition: width 0.35s ease; width: 0%; }
+  .barra-num { font-size: 13px; font-weight: 600; color: var(--azul-oscuro); white-space: nowrap; min-width: 52px; }
+  .barra-score { font-size: 13px; color: var(--texto-suave); white-space: nowrap; }
+  .barra-score .ok { color: var(--verde); font-weight: 600; }
+  .barra-score .ko { color: var(--rojo); font-weight: 600; }
+  main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+  .card { background: var(--blanco); border: 1px solid var(--borde); border-radius: 10px; padding: 1.5rem 1.6rem; margin-bottom: 1.4rem; transition: box-shadow 0.2s; }
+  .card:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.06); }
+  .card-num { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--naranja); margin-bottom: 0.5rem; }
+  .card-pregunta { font-family: 'Lora', serif; font-size: 1rem; font-weight: 600; line-height: 1.55; color: var(--azul-oscuro); margin-bottom: 1.1rem; }
+  .opciones { display: flex; flex-direction: column; gap: 0.45rem; }
+  .opcion { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.7rem 1rem; border: 1.5px solid var(--borde); border-radius: 7px; cursor: pointer; background: var(--blanco); text-align: left; font-family: 'Source Sans 3', sans-serif; font-size: 0.93rem; color: var(--texto); line-height: 1.5; transition: border-color 0.15s, background 0.15s; width: 100%; }
+  .opcion:hover:not(:disabled) { border-color: var(--naranja-borde); background: var(--naranja-claro); }
+  .opcion .letra { font-weight: 700; color: var(--naranja); min-width: 18px; font-size: 0.85rem; margin-top: 2px; flex-shrink: 0; }
+  .opcion.correcta { border-color: var(--verde-borde); background: var(--verde-bg); color: var(--verde); }
+  .opcion.correcta .letra { color: #15803d; }
+  .opcion.incorrecta { border-color: var(--rojo-borde); background: var(--rojo-bg); color: var(--rojo); }
+  .opcion.incorrecta .letra { color: var(--rojo); }
+  .opcion:disabled { cursor: default; }
+  .explicacion { display: none; margin-top: 1rem; padding: 0.9rem 1rem 0.9rem 1.1rem; background: #fffbeb; border-left: 3px solid var(--naranja); border-radius: 0 6px 6px 0; font-size: 0.875rem; line-height: 1.65; color: var(--texto); }
+  .explicacion.visible { display: block; animation: fadeIn 0.22s ease; }
+  .explicacion strong { color: var(--azul-oscuro); }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+  .resultado { display: none; background: var(--blanco); border: 1px solid var(--borde); border-radius: 12px; padding: 2.5rem 2rem 2rem; margin: 1.5rem 0 2rem; text-align: center; }
+  .resultado.visible { display: block; animation: fadeIn 0.3s ease; }
+  .resultado-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--naranja); font-weight: 600; margin-bottom: 0.5rem; }
+  .resultado h2 { font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 700; color: var(--azul-oscuro); margin-bottom: 0.3rem; }
+  .resultado-nota { font-size: 3.2rem; font-weight: 700; color: var(--azul-oscuro); line-height: 1; margin: 1rem 0 0.3rem; font-family: 'Lora', serif; }
+  .resultado-nota span { color: var(--naranja); }
+  .calif-badge { display: inline-block; padding: 5px 16px; border-radius: 99px; font-size: 0.9rem; font-weight: 600; margin: 0.6rem 0 1.5rem; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 0 0 1.5rem; }
+  .stat { background: var(--fondo); border: 1px solid var(--borde); border-radius: 8px; padding: 0.9rem 0.5rem; }
+  .stat-num { font-size: 1.9rem; font-weight: 700; font-family: 'Lora', serif; }
+  .stat-lab { font-size: 0.78rem; color: var(--texto-suave); margin-top: 2px; }
+  .resultado-hint { font-size: 0.85rem; color: var(--texto-suave); margin-bottom: 1.2rem; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0.7rem 1.6rem; border-radius: 7px; font-family: 'Source Sans 3', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.18s; }
+  .btn-naranja { background: var(--naranja); color: white; }
+  .btn-naranja:hover { background: #b45309; transform: translateY(-1px); }
+  @media (max-width: 580px) { main { padding: 1.2rem 1rem 4rem; } .card { padding: 1.1rem; } .stats { grid-template-columns: 1fr 1fr; } .header-top { padding: 1rem; gap: 0.8rem; } .header-meta { padding: 0.5rem 1rem; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <img class="header-logo"
+      src="https://opositorgva.wordpress.com/wp-content/uploads/2024/04/cropped-opositar-en-valencia-logo-sin-fondo.png"
+      alt="Opositar en Valencia" onerror="this.style.display='none'">
+    <div class="header-textos">
+      <div class="header-site">Opositar en Valencia · GVA · Temario específico</div>
+      <div class="header-titulo">Tema 7 — Ley 1/2015, de Hacienda Pública: Título II, Presupuestos de la Generalitat</div>
+      <div class="header-sub">Principios, contenido, elaboración, estructura y modificaciones de crédito · Auxiliar Administrativo C2</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="header-meta-inner">
+      <span id="totalLabel">📋 Cargando...</span>
+      <span>🎯 Nivel medio-alto</span>
+      <span>🔀 Orden aleatorio en cada intento</span>
+      <span>✅ Explicación en cada respuesta</span>
+    </div>
+  </div>
+</header>
+
+<div class="barra-wrap">
+  <div class="barra-inner">
+    <div class="barra-track"><div class="barra-fill" id="barraFill"></div></div>
+    <span class="barra-num" id="barraNum">0 / ?</span>
+    <span class="barra-score"><span class="ok" id="scoreOk">✓ 0</span> &nbsp;<span class="ko" id="scoreKo">✗ 0</span></span>
+  </div>
+</div>
+
+<main id="mainContent"></main>
+
+<script>
+const BANCO = [
+
+  /* ══ CAPÍTULO I — PRINCIPIOS Y REGLAS DE PROGRAMACIÓN ══ */
+  {
+    p: "¿Cuáles son los principios que rigen la programación presupuestaria de la Generalitat según el artículo 24.1 de la Ley 1/2015?",
+    ops: [
+      "Legalidad, anualidad, universalidad, unidad, especialidad, publicidad y equilibrio presupuestario",
+      "Estabilidad presupuestaria, sostenibilidad financiera, plurianualidad, transparencia, eficiencia en la asignación y utilización de los recursos públicos, responsabilidad y lealtad institucional",
+      "Eficacia, economía, eficiencia, equidad, equilibrio territorial y coordinación interadministrativa",
+      "Unidad, universalidad, anualidad, nivelación, especialidad y publicidad"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 24.1 de la Ley 1/2015 enumera expresamente los siete principios de programación presupuestaria: estabilidad presupuestaria, sostenibilidad financiera, plurianualidad, transparencia, eficiencia en la asignación y utilización de los recursos públicos, responsabilidad y lealtad institucional. Además, la Generalitat velará por el equilibrio territorial y la solidaridad interna."
+  },
+  {
+    p: "Según el artículo 24.2 de la Ley 1/2015, ¿qué obligación tienen las disposiciones legales, reglamentarias, actos administrativos y convenios que afecten a gastos o ingresos públicos?",
+    ops: [
+      "Deben ser aprobadas por Les Corts con mayoría absoluta cuando superen el 1 % del presupuesto",
+      "Deben valorar con carácter previo sus repercusiones y efectos, y supeditarse estrictamente al cumplimiento de los principios de estabilidad presupuestaria y sostenibilidad financiera y a los escenarios presupuestarios plurianuales",
+      "Deben ir acompañadas de informe favorable de la Abogacía de la Generalitat y de la Intervención General",
+      "Solo deben comunicarse a la conselleria de hacienda para su anotación, sin que esta pueda vetarlas"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 24.2 de la Ley 1/2015 establece que cualquier actuación que afecte a gastos o ingresos públicos presentes o futuros debe, con carácter previo, «valorar sus repercusiones y efectos, y supeditarse de forma estricta al cumplimiento de las exigencias de los principios de estabilidad presupuestaria y sostenibilidad financiera y a los escenarios presupuestarios plurianuales». Es una exigencia de supeditación previa, no meramente informativa."
+  },
+  {
+    p: "El artículo 25.1 de la Ley 1/2015 establece que la gestión presupuestaria está sometida al régimen de presupuesto único y anual. ¿Qué derechos económicos se imputan al ejercicio presupuestario?",
+    ops: [
+      "Los derechos económicos reconocidos y cobrados efectivamente durante el ejercicio",
+      "Los derechos económicos reconocidos durante el ejercicio, cualquiera que sea el período del que se deriven",
+      "Solo los derechos devengados en el propio ejercicio y que tengan su origen en operaciones corrientes",
+      "Los derechos económicos correspondientes a ingresos ya ingresados en la Tesorería de la Generalitat"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 25.1.a) de la Ley 1/2015 establece que al ejercicio presupuestario se imputarán «los derechos económicos reconocidos durante el ejercicio, cualquiera que sea el período del que se deriven». Esto recoge el principio de devengo para los derechos: lo relevante es el momento del reconocimiento, no el período al que corresponde el derecho ni el cobro efectivo."
+  },
+  {
+    p: "Según el artículo 25.1.b) de la Ley 1/2015, ¿cuándo se imputan al ejercicio presupuestario las obligaciones económicas reconocidas?",
+    ops: [
+      "Las reconocidas hasta el 31 de enero del año siguiente, siempre que correspondan a gastos realizados durante el ejercicio",
+      "Las reconocidas hasta el fin del mes de diciembre, siempre que se correspondan con adquisiciones, obras, servicios, prestaciones o gastos realizados dentro del ejercicio y con cargo a los respectivos créditos",
+      "Solo las reconocidas y pagadas antes del 31 de diciembre del ejercicio",
+      "Las reconocidas hasta el 31 de marzo del año siguiente si derivan de compromisos adquiridos en el ejercicio"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 25.1.b) de la Ley 1/2015 dispone que se imputan al ejercicio las obligaciones «reconocidas hasta el fin del mes de diciembre, siempre que se correspondan con adquisiciones, obras, servicios, prestaciones o, en general, gastos realizados dentro del ejercicio y con cargo a las respectivas dotaciones o créditos, sin perjuicio de lo dispuesto en el artículo 39». El criterio es el reconocimiento antes de fin de diciembre con gasto realizado en el ejercicio."
+  },
+  {
+    p: "El principio de no afectación (artículo 25.3 de la Ley 1/2015) establece que los recursos de la Administración de la Generalitat se destinarán a satisfacer el conjunto de sus obligaciones. ¿Qué excepción contempla expresamente la norma?",
+    ops: [
+      "Los recursos pueden afectarse siempre que lo acuerde el Consell mediante decreto",
+      "Los recursos pueden afectarse a fines determinados cuando así lo establezca una ley",
+      "Los recursos pueden afectarse por orden de la conselleria de hacienda cuando lo exija la sostenibilidad financiera",
+      "No existe excepción; todos los recursos sin excepción deben destinarse al conjunto de obligaciones"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 25.3 de la Ley 1/2015 recoge el principio de no afectación, pero prevé una excepción: «salvo que por ley se establezca su afectación a fines determinados». Solo una norma con rango de ley puede quebrar este principio, no un decreto ni una orden. Es un dato técnico relevante para el examen."
+  },
+  {
+    p: "El artículo 25.4 de la Ley 1/2015 exige que los derechos y las obligaciones reconocidos se apliquen a los presupuestos por su importe íntegro. ¿Qué prohíbe expresamente este principio?",
+    ops: [
+      "Incluir en los presupuestos partidas estimadas sin sustento documental",
+      "Atender obligaciones mediante minoración de los derechos a liquidar o ya ingresados, salvo autorización legal expresa",
+      "Reconocer obligaciones sin crédito presupuestario habilitado",
+      "Aplicar retenciones de crédito sin autorización de la Intervención General"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 25.4 de la Ley 1/2015 recoge el principio de presupuesto bruto o de importe íntegro: «los derechos y las obligaciones reconocidos se aplicarán a los presupuestos por su importe íntegro, sin que puedan atenderse obligaciones mediante minoración de los derechos a liquidar o ya ingresados, salvo que la ley lo autorice de modo expreso». Se impide la compensación de pagos contra ingresos, salvo ley que lo permita."
+  },
+  {
+    p: "El artículo 26.1 de la Ley 1/2015 establece que la conselleria con competencias en hacienda debe emitir un informe previo a la aprobación de disposiciones legales y reglamentarias. ¿Qué carácter tiene ese informe?",
+    ops: [
+      "Preceptivo y no vinculante; puede ignorarse si el órgano proponente lo justifica",
+      "Preceptivo y vinculante respecto a la adecuación a las disponibilidades presupuestarias y a los límites de los escenarios plurianuales",
+      "Facultativo y vinculante; solo se solicita a petición del órgano promotor de la norma",
+      "Preceptivo, pero únicamente vinculante cuando supere el 5 % del presupuesto del capítulo correspondiente"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 26.1 de la Ley 1/2015 establece que la conselleria de hacienda emitirá «un informe, de carácter preceptivo y vinculante, respecto a su adecuación a las disponibilidades presupuestarias y a los límites de los escenarios presupuestarios plurianuales». La doble condición —preceptivo y vinculante— es el dato clave que distingue este informe de otros meramente consultivos."
+  },
+  {
+    p: "Según el artículo 26.1.b) de la Ley 1/2015, ¿en qué tipo de acuerdos debe recabarse también el informe preceptivo y vinculante de hacienda?",
+    ops: [
+      "En los acuerdos de adquisición de bienes inmuebles por importe superior a dos millones de euros",
+      "En los acuerdos, convenios, pactos o instrumentos que modifiquen las condiciones retributivas del personal o que deriven en incrementos de gasto en costes de personal",
+      "En los acuerdos de concesión de subvenciones nominativas que figuren en la Ley de Presupuestos",
+      "En los acuerdos de modificación de crédito superiores al 10 % del crédito del programa afectado"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 26.1.b) de la Ley 1/2015 exige el informe preceptivo y vinculante para «la aprobación de todos aquellos acuerdos, convenios, pactos o instrumentos similares adoptados en el ámbito de la Administración de la Generalitat y de su sector público instrumental, que suponen modificación de las condiciones retributivas de su personal o de los que se derivan, directa o indirectamente, incrementos de gasto público en materia de costes de personal»."
+  },
+  {
+    p: "El artículo 26.3 de la Ley 1/2015 establece que no será necesario solicitar el informe de hacienda cuando la memoria económica acredite que la actuación no comporta gasto. ¿Qué condición adicional se exige y qué excepciones impiden aplicar esta dispensa?",
+    ops: [
+      "Basta con que la memoria diga que no hay gasto; la excepción son solo las subvenciones nominativas",
+      "Debe incluirse en el texto aprobado una referencia expresa a la no incidencia presupuestaria; la dispensa no opera si afecta al capítulo I del estado de gastos o a la estructura orgánica y funcional del sector público",
+      "Debe existir un certificado del interventor delegado; la excepción son solo las normas con rango de ley",
+      "La conselleria promotora asume la responsabilidad mediante declaración; sin excepciones al principio de no incidencia"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 26.3 de la Ley 1/2015 exige que, en el texto sometido a aprobación, se incluya «a través de la incorporación de un apartado, artículo, disposición o cláusula específica, una referencia expresa a la no incidencia presupuestaria». Sin embargo, esta dispensa no es aplicable cuando el acto o disposición tenga incidencia o afecte al capítulo I del estado de gastos (gastos de personal) o se trate de una norma que afecte a la estructura orgánica y funcional de cualquier sujeto del sector público."
+  },
+
+  /* ══ CAPÍTULO III — CONTENIDO, ELABORACIÓN Y ESTRUCTURA ══ */
+  {
+    p: "¿Cómo define el artículo 30 de la Ley 1/2015 los Presupuestos de la Generalitat?",
+    ops: [
+      "El plan de ingresos y gastos de la Administración de la Generalitat para el ejercicio siguiente, aprobado por el Consell",
+      "La expresión cifrada, conjunta y sistemática de los derechos y obligaciones a liquidar durante el ejercicio por cada uno de los sujetos que forman parte del sector público de la Generalitat",
+      "El estado contable que recoge los ingresos efectivamente recaudados y los pagos realizados durante el ejercicio presupuestario",
+      "El conjunto de créditos autorizados por Les Corts para la financiación de los servicios públicos de la Generalitat"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 30 de la Ley 1/2015 define los Presupuestos de la Generalitat como «la expresión cifrada, conjunta y sistemática de los derechos y obligaciones a liquidar durante el ejercicio por cada uno de los sujetos que forman parte del sector público de la Generalitat». Los tres adjetivos —cifrada, conjunta y sistemática— son clave y habituales en preguntas de examen."
+  },
+  {
+    p: "Según el artículo 31.1 de la Ley 1/2015, ¿qué tres grandes bloques integran los Presupuestos de la Generalitat?",
+    ops: [
+      "Los presupuestos de la Administración general, los de los entes locales adscritos y los de las universidades públicas",
+      "Los presupuestos de los sujetos del sector público administrativo; los presupuestos de explotación y capital de las entidades del sector público empresarial y fundacional; y los presupuestos de los fondos del artículo 2.4",
+      "El estado de gastos corrientes, el estado de gastos de capital y los presupuestos de las entidades autónomas",
+      "Los presupuestos consolidados de ingresos, los presupuestos de gastos y el presupuesto de tesorería"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 31.1 de la Ley 1/2015 establece que los Presupuestos de la Generalitat estarán integrados por: a) los presupuestos de los sujetos del sector público administrativo; b) los presupuestos de explotación y capital de las entidades del sector público empresarial y fundacional; y c) los presupuestos de los fondos a que se refiere el artículo 2.4. Esta tripartición es fundamental para entender el alcance subjetivo del presupuesto."
+  },
+  {
+    p: "El artículo 31.2.d) de la Ley 1/2015 establece que los Presupuestos de la Generalitat determinarán la estimación de beneficios fiscales. ¿Qué detalle específico exige la norma para cada tipo de impuesto?",
+    ops: [
+      "El número de contribuyentes afectados por cada beneficio fiscal, agrupado por tipo de impuesto",
+      "El importe de los beneficios fiscales correspondientes a normativa estatal y a normativa de la Comunitat Valenciana, para cada tipo de impuesto",
+      "La comparación interanual con el ejercicio anterior del coste de los beneficios fiscales",
+      "Solo el coste global de los beneficios fiscales, sin desglose por normativa estatal o autonómica"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 31.2.d) de la Ley 1/2015 exige que los presupuestos incluyan «la estimación de los beneficios fiscales que afecten a los tributos de la Generalitat y a aquellos cuyo rendimiento se cede por el Estado a la Generalitat, detallando para cada tipo de impuesto el importe de los beneficios fiscales correspondientes a normativa estatal y a normativa de la Comunitat Valenciana». El doble desglose —estatal/autonómico— es el dato técnico clave."
+  },
+  {
+    p: "¿Qué son los créditos presupuestarios según el artículo 32.1 de la Ley 1/2015?",
+    ops: [
+      "Las autorizaciones máximas de endeudamiento aprobadas por Les Corts para la financiación del déficit",
+      "Cada una de las asignaciones individualizadas de gasto que figuran en los presupuestos para la cobertura de las necesidades para las que hayan sido aprobados",
+      "Los derechos de cobro reconocidos a favor de la Generalitat durante el ejercicio presupuestario",
+      "Las dotaciones globales asignadas a cada conselleria para el conjunto de sus actuaciones"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 32.1 de la Ley 1/2015 define los créditos presupuestarios como «cada una de las asignaciones individualizadas de gasto, que figuran en los presupuestos de los sujetos a que se refiere el apartado 1.a del artículo anterior, para la cobertura de las necesidades para las que hayan sido aprobados». Su especificación vendrá determinada por agrupación orgánica, por programas y económica."
+  },
+  {
+    p: "Según el artículo 32.3.f) de la Ley 1/2015, ¿qué deben incluir los programas de gasto en materia de evaluación?",
+    ops: [
+      "Un plan de auditoría interna y externa para cada programa, con cronograma de ejecución",
+      "Indicadores de ejecución asociados a cada objetivo seleccionado que permitan la medición, seguimiento y evaluación del resultado en términos de eficacia, eficiencia, economía y calidad",
+      "Un informe de impacto ambiental asociado a los gastos de inversión de cada programa",
+      "Un cuadro de mando integral con perspectivas financiera, de cliente, de procesos y de aprendizaje"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 32.3.f) de la Ley 1/2015 exige que los programas de gasto establezcan «los indicadores de ejecución asociados a cada uno de los objetivos seleccionados que permitan la medición, seguimiento y evaluación del resultado en términos de eficacia, eficiencia, economía y calidad». Los cuatro criterios de evaluación —eficacia, eficiencia, economía y calidad— son datos relevantes."
+  },
+  {
+    p: "¿Quién acuerda el límite máximo de gasto no financiero de los Presupuestos de la Generalitat para el siguiente ejercicio, según el artículo 33.1 de la Ley 1/2015?",
+    ops: [
+      "Les Corts, mediante resolución aprobada por mayoría simple en el debate de política general",
+      "El Consell, a propuesta de la persona titular de la conselleria con competencias en materia de hacienda, una vez aprobados los objetivos de estabilidad y deuda pública y la regla de gasto",
+      "La persona titular de la conselleria de hacienda, mediante orden, oída la Comisión Delegada de Asuntos Económicos",
+      "La Sindicatura de Comptes, como órgano de control externo, previo informe de la Intervención General"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 33.1 de la Ley 1/2015 establece que, «aprobados los objetivos de estabilidad y deuda pública, así como la regla de gasto, el Consell, a propuesta de la persona titular de la conselleria con competencias en materia de hacienda, acordará el límite máximo de gasto no financiero». El Consell es quien acuerda el techo de gasto, a propuesta del titular de hacienda, no de forma autónoma."
+  },
+  {
+    p: "El artículo 33.2 de la Ley 1/2015 atribuye a la titular de la conselleria de hacienda la fijación del procedimiento y plazos de elaboración de los presupuestos. ¿A través de qué instrumento normativo se fijan estos criterios?",
+    ops: [
+      "Mediante decreto del Consell, publicado en el DOGV antes del 30 de junio del año anterior",
+      "Mediante orden de la conselleria de hacienda, que establecerá también los criterios de elaboración, límites cuantitativos y prioridades",
+      "Mediante resolución de la dirección general de presupuestos, previo acuerdo del Consell",
+      "Mediante circular interna de la dirección general de presupuestos, sin necesidad de publicación en el DOGV"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 33.2 de la Ley 1/2015 establece que «la persona titular de la conselleria con competencias en materia de hacienda fijará por orden el procedimiento y los plazos para la elaboración de los Presupuestos de la Generalitat», estableciendo criterios de elaboración, límites cuantitativos y prioridades. Es una orden, no un decreto ni una resolución."
+  },
+  {
+    p: "Según el artículo 34.1 de la Ley 1/2015, ¿cuál es el plazo máximo para remitir el Proyecto de Ley de Presupuestos de la Generalitat a Les Corts?",
+    ops: [
+      "Antes del 1 de octubre de cada año",
+      "Antes del 1 de noviembre de cada año",
+      "Antes del 1 de diciembre de cada año",
+      "Antes del 15 de octubre de cada año"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 34.1 de la Ley 1/2015 establece que el Proyecto de Ley de Presupuestos «se remitirá a Les Corts antes del 1 de noviembre de cada año, para su examen y aprobación o, en su caso, enmienda o devolución al Consell». El plazo del 1 de noviembre es un dato técnico habitual en exámenes de oposición."
+  },
+  {
+    p: "El artículo 34.2 de la Ley 1/2015 enumera los documentos que deben acompañar al Proyecto de Ley de Presupuestos. ¿Cuál de los siguientes NO figura entre ellos?",
+    ops: [
+      "Informe de impacto de género",
+      "Memoria de los beneficios fiscales que afecten a los tributos de la Generalitat",
+      "Informe de evaluación del gasto público del ejercicio anterior, elaborado por la Sindicatura de Comptes",
+      "Estados consolidados de los presupuestos"
+    ],
+    c: 2,
+    exp: "<strong>Respuesta correcta: C.</strong> El artículo 34.2 de la Ley 1/2015 enumera nueve documentos que acompañan al Proyecto de Ley de Presupuestos: estados consolidados, memoria explicativa del articulado, detalle de plantillas, distribución de gastos por objetivos, detalle plurianual de inversiones, liquidación del año anterior, Informe Económico-financiero, memoria de beneficios fiscales e informe de impacto de género. El «informe de evaluación elaborado por la Sindicatura de Comptes» no figura en esta lista; la Sindicatura es el órgano de control externo, no elabora documentos que acompañen al proyecto."
+  },
+  {
+    p: "¿Qué ocurre si Les Corts no aprueban el presupuesto de la Generalitat antes del primer día del ejercicio económico siguiente, según el artículo 35.1 de la Ley 1/2015?",
+    ops: [
+      "El Consell queda habilitado para aplicar un presupuesto provisional equivalente al 50 % del ejercicio anterior hasta la aprobación del nuevo",
+      "Se entenderá prorrogado el del ejercicio anterior hasta la aprobación y publicación del nuevo en el Diari Oficial de la Comunitat Valenciana",
+      "La Intervención General asume la gestión presupuestaria hasta que Les Corts aprueben el nuevo presupuesto",
+      "Se aplica el principio de continuidad presupuestaria: solo se pueden atender gastos de personal y deuda pública"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 35.1 de la Ley 1/2015 establece que «si Les Corts no aprobaran el presupuesto de la Generalitat antes del primer día del ejercicio económico correspondiente, se entenderá prorrogado el del ejercicio anterior hasta la aprobación y publicación del nuevo en el Diari Oficial de la Comunitat Valenciana». La prórroga opera de modo automático, sin necesidad de acuerdo expreso."
+  },
+  {
+    p: "El artículo 35.2 de la Ley 1/2015 limita el alcance de la prórroga presupuestaria. ¿Qué créditos NO quedan prorrogados?",
+    ops: [
+      "Los créditos de personal y los créditos correspondientes al servicio de la deuda pública",
+      "Los créditos para gastos correspondientes a programas o actuaciones que terminen en el ejercicio cuyos presupuestos se prorrogan, o para obligaciones que se extingan en el mismo",
+      "Los créditos de inversión real que no tengan carácter plurianual",
+      "Todos los créditos de operaciones de capital, que quedan suspendidos hasta la aprobación del nuevo presupuesto"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 35.2 de la Ley 1/2015 precisa que «la prórroga no afectará a los créditos para gastos correspondientes a programas o actuaciones que terminen en el ejercicio cuyos presupuestos se prorrogan o para obligaciones que se extingan en el mismo». Es decir, si el programa o la obligación concluía en el ejercicio prorrogado, ese crédito no se arrastra al nuevo ejercicio."
+  },
+  {
+    p: "Según el artículo 37 de la Ley 1/2015, ¿cuántas clasificaciones estructuran los estados de gastos de los sujetos con presupuesto limitativo?",
+    ops: [
+      "Dos: clasificación orgánica y clasificación económica",
+      "Tres: clasificación orgánica, clasificación funcional y clasificación económica",
+      "Cuatro: clasificación orgánica, clasificación por programas, clasificación económica y clasificación territorial",
+      "Cinco: orgánica, funcional, económica, territorial y por objetivos"
+    ],
+    c: 2,
+    exp: "<strong>Respuesta correcta: C.</strong> El artículo 37 de la Ley 1/2015 establece cuatro clasificaciones para los estados de gastos: a) clasificación orgánica (por secciones y servicios presupuestarios); b) clasificación por programas (con identificación funcional según finalidad); c) clasificación económica (operaciones corrientes, de capital, financieras y Fondo de Contingencia); d) clasificación territorial (por provincias, comarcas o municipios). Son cuatro, no tres ni cinco."
+  },
+  {
+    p: "Según el artículo 38 de la Ley 1/2015, ¿qué clasificaciones estructuran los estados de ingresos de los sujetos con presupuesto limitativo?",
+    ops: [
+      "Clasificación orgánica, clasificación económica y clasificación territorial",
+      "Solo la clasificación económica, separando ingresos corrientes, de capital y operaciones financieras",
+      "Clasificación orgánica y clasificación económica",
+      "Clasificación funcional y clasificación económica"
+    ],
+    c: 2,
+    exp: "<strong>Respuesta correcta: C.</strong> El artículo 38 de la Ley 1/2015 establece que los estados de ingresos se estructurarán siguiendo las clasificaciones orgánica y económica. A diferencia del estado de gastos, que tiene cuatro clasificaciones, el estado de ingresos solo utiliza dos: orgánica (distinguiendo la Administración de la Generalitat y el resto de sujetos) y económica (ingresos corrientes, de capital y operaciones financieras)."
+  },
+  {
+    p: "En la clasificación económica de los ingresos (art. 38 Ley 1/2015), ¿qué conceptos se distinguen dentro de los ingresos corrientes?",
+    ops: [
+      "Impuestos directos, impuestos indirectos, tasas, precios públicos y otros ingresos, transferencias corrientes e ingresos patrimoniales",
+      "Impuestos directos, impuestos indirectos, cotizaciones sociales, transferencias corrientes y otros ingresos",
+      "Enajenación de inversiones reales, transferencias de capital y activos financieros",
+      "Impuestos directos, tasas, ingresos patrimoniales y reintegros de ejercicios anteriores"
+    ],
+    c: 0,
+    exp: "<strong>Respuesta correcta: A.</strong> El artículo 38.b) de la Ley 1/2015 establece que en los ingresos corrientes se distinguirán: impuestos directos, impuestos indirectos, tasas, precios públicos y otros ingresos, transferencias corrientes e ingresos patrimoniales. La enumeración completa de estas seis categorías de ingresos corrientes es un dato técnico habitual en las oposiciones de auxiliar administrativo."
+  },
+
+  /* ══ CAPÍTULO IV — CRÉDITOS Y SUS MODIFICACIONES ══ */
+  {
+    p: "¿Cuáles son las consecuencias de que una disposición de rango inferior a ley o un acto administrativo vulnere el principio de especialidad de los créditos del artículo 39 de la Ley 1/2015?",
+    ops: [
+      "Son anulables, debiendo el órgano superior revocarlos en el plazo de tres meses",
+      "Son nulos de pleno derecho, sin perjuicio de la responsabilidad que de su infracción pudiera derivar",
+      "Son irregulares, pero producen efectos hasta que sean expresamente anulados por resolución del órgano competente",
+      "Son únicamente objeto de reproche disciplinario para el funcionario que los dictó, sin afectar a la validez del acto"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 39.4 de la Ley 1/2015 establece que «las disposiciones normativas con rango inferior a ley y los actos administrativos que vulneren lo establecido en los apartados anteriores serán nulos de pleno derecho, sin perjuicio de la responsabilidad que de su infracción pudiera derivar». La nulidad de pleno derecho es la consecuencia más grave en Derecho administrativo; no se trata de mera anulabilidad."
+  },
+  {
+    p: "El artículo 39.5 de la Ley 1/2015 establece que solo pueden contraerse obligaciones de gastos realizados en el propio ejercicio. ¿Cuál de los siguientes supuestos NO está entre las excepciones expresamente previstas?",
+    ops: [
+      "Las obligaciones derivadas de liquidaciones de atrasos a favor del personal",
+      "Las obligaciones que tengan su origen en resoluciones judiciales",
+      "Las obligaciones derivadas de compromisos de gasto de ejercicios cerrados debidamente adquiridos conforme al procedimiento administrativo y contable",
+      "Las obligaciones derivadas de contratos de suministro que no pudieron ejecutarse por causas de fuerza mayor"
+    ],
+    c: 3,
+    exp: "<strong>Respuesta correcta: D.</strong> El artículo 39.5 de la Ley 1/2015 prevé tres excepciones al principio de imputación al ejercicio: a) liquidaciones de atrasos de personal; b) resoluciones judiciales; c) compromisos de gasto de ejercicios cerrados debidamente adquiridos. La «fuerza mayor en contratos de suministro» no figura como excepción expresa. Si fuera necesario imputar obligaciones de ejercicios anteriores no contempladas en esas tres letras, requeriría acuerdo del Consell y publicación en el DOGV."
+  },
+  {
+    p: "Según el artículo 40.3 de la Ley 1/2015, ¿cuántos ejercicios como máximo pueden alcanzar los compromisos de gasto plurianual y qué porcentajes del crédito inicial pueden aplicarse a los ejercicios posteriores?",
+    ops: [
+      "Máximo 3 ejercicios; 60 % en el inmediato siguiente, 50 % en el segundo y tercero",
+      "Máximo 4 ejercicios; 70 % en el inmediato siguiente, 60 % en el segundo, y 50 % en el tercero y cuarto",
+      "Máximo 5 ejercicios; 80 % en el primero, 70 % en el segundo, 60 % en el tercero, 50 % en el cuarto y 40 % en el quinto",
+      "Máximo 3 ejercicios; 70 % en el primero, 60 % en el segundo y 50 % en el tercero, sin posibilidad de excepción"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 40.3 de la Ley 1/2015 establece que los compromisos plurianuales no podrán extenderse más allá de cuatro ejercicios, y los porcentajes máximos del crédito inicial son: 70 % en el ejercicio inmediato siguiente, 60 % en el segundo, y 50 % en el tercero y cuarto. Memorizar estos cuatro porcentajes (70-60-50-50) es imprescindible para el examen."
+  },
+  {
+    p: "En los contratos de obra plurianuales (salvo los de abono total del precio), el artículo 40.3 de la Ley 1/2015 exige una retención adicional. ¿En qué consiste?",
+    ops: [
+      "Una retención del 5 % del importe de adjudicación, aplicada al año de inicio del contrato",
+      "Una retención adicional de crédito del 10 % del importe de adjudicación en el momento en que esta se realice, aplicada al ejercicio en que finalice el plazo o al siguiente",
+      "Una retención del 15 % del importe de adjudicación, distribuida por partes iguales entre todos los ejercicios del contrato",
+      "Una retención del 20 % del primer certificado de obra, como garantía de buen fin"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 40.3, párrafo segundo, de la Ley 1/2015 establece que en los contratos de obra plurianuales (salvo abono total del precio) «se efectuará una retención adicional de crédito del 10 % del importe de adjudicación, en el momento en que ésta se realice». Esta retención se aplica al ejercicio en que finalice el plazo fijado en el contrato o al siguiente, y computa dentro de los porcentajes del artículo 40.3."
+  },
+  {
+    p: "¿A qué compromisos de gasto no son aplicables los límites de anualidades y porcentajes del artículo 40.3 de la Ley 1/2015?",
+    ops: [
+      "A los compromisos de inversión en infraestructuras de comunicaciones de interés autonómico",
+      "A los compromisos derivados de la carga financiera de la deuda y de los arrendamientos de inmuebles, incluidos los contratos mixtos de arrendamiento y adquisición",
+      "A los compromisos financiados con fondos propios de la Generalitat cuando superen los 10 millones de euros",
+      "A todos los compromisos de capital cuya ejecución supere dos ejercicios presupuestarios"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 40.3, último párrafo, de la Ley 1/2015 exceptúa expresamente de las limitaciones de anualidades y porcentajes «los compromisos derivados de la carga financiera de la deuda y de los arrendamientos de inmuebles, incluidos los contratos mixtos de arrendamiento y adquisición». La naturaleza de estos gastos —estructurales y de largo plazo— justifica su exclusión de los límites generales."
+  },
+  {
+    p: "Según el artículo 40.4 de la Ley 1/2015, ¿quién puede modificar los porcentajes del artículo 40.3 o incrementar el número de anualidades en casos justificados?",
+    ops: [
+      "La persona titular de la conselleria de hacienda, mediante orden motivada",
+      "El Consell, a propuesta de la conselleria de hacienda a iniciativa de la conselleria correspondiente, previo informe del centro directivo competente en materia de presupuestos",
+      "Les Corts, mediante ley de autorización específica para cada operación",
+      "La Intervención General, mediante informe preceptivo y vinculante"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 40.4 de la Ley 1/2015 establece que «el Consell, en casos especialmente justificados, podrá acordar la modificación de los porcentajes anteriores, incrementar el número de anualidades del apartado anterior o autorizar la adquisición de compromisos de gastos que hayan de atenderse en ejercicios posteriores en el caso de que no exista crédito inicial». Lo hace a propuesta de la conselleria de hacienda, a iniciativa de la conselleria correspondiente, y previo informe del centro directivo de presupuestos."
+  },
+  {
+    p: "El artículo 41 de la Ley 1/2015 regula la tramitación anticipada de expedientes de gastos. ¿Cuál es el momento máximo hasta el que puede llegar esta tramitación anticipada?",
+    ops: [
+      "Hasta la resolución definitiva del expediente, incluida la formalización del contrato",
+      "Hasta el momento inmediato anterior a la adquisición del compromiso de gasto",
+      "Hasta la aprobación del crédito en el presupuesto del ejercicio siguiente por Les Corts",
+      "Hasta la fase de autorización del gasto, pero no hasta la disposición ni el reconocimiento de la obligación"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 41.3 de la Ley 1/2015 establece que «la tramitación anticipada podrá llegar, como máximo, al momento inmediato anterior a la adquisición del compromiso de gasto». Además, el artículo 41.4 exige incluir una cláusula suspensiva que condicione la resolución a la existencia efectiva de crédito adecuado y suficiente una vez aprobado el presupuesto del ejercicio siguiente."
+  },
+  {
+    p: "Según el artículo 42 de la Ley 1/2015, ¿a partir de qué importe puede diferirse el pago del precio de compra de bienes inmuebles adquiridos directamente, y cuál es el desembolso inicial mínimo?",
+    ops: [
+      "A partir de 1 millón de euros; desembolso inicial mínimo del 20 %",
+      "A partir de 2 millones de euros; desembolso inicial mínimo del 25 % a la firma de la escritura",
+      "A partir de 500.000 euros; desembolso inicial mínimo del 30 %",
+      "A partir de 5 millones de euros; desembolso inicial mínimo del 10 %"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 42 de la Ley 1/2015 establece que «podrá ser diferido el vencimiento de la obligación de pago del precio de compra de bienes inmuebles adquiridos directamente cuyo importe exceda de dos millones de euros, sin que, en ningún caso, el desembolso inicial a la firma de la escritura pueda ser inferior al 25 por ciento del precio». El resto puede distribuirse en los cuatro ejercicios siguientes."
+  },
+  {
+    p: "¿Para qué finalidad se destina el Fondo de Contingencia de ejecución presupuestaria, según el artículo 43.1 de la Ley 1/2015?",
+    ops: [
+      "Para financiar inversiones de emergencia aprobadas por el Consell durante el ejercicio",
+      "Para hacer frente a necesidades inaplazables de carácter no discrecional y no previstas, en todo o en parte, en el presupuesto inicial",
+      "Para cubrir los déficits de liquidez de los organismos autónomos durante el ejercicio",
+      "Para atender gastos de personal no previstos en el presupuesto inicial, derivados de nuevas contrataciones"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 43.1 de la Ley 1/2015 establece que el Fondo de Contingencia es «una dotación diferenciada que se destinará a hacer frente durante el correspondiente ejercicio a necesidades inaplazables de carácter no discrecional y no previstas, en todo o en parte, en el presupuesto inicial». Los dos requisitos acumulativos son: inaplazables y no discrecionales."
+  },
+  {
+    p: "El artículo 43.2 de la Ley 1/2015 establece una prohibición expresa sobre el uso del Fondo de Contingencia. ¿Cuál es?",
+    ops: [
+      "No puede utilizarse para financiar gastos de inversión, solo gastos corrientes",
+      "No puede utilizarse para financiar modificaciones destinadas a gastos o actuaciones que deriven de decisiones discrecionales de la administración sin cobertura presupuestaria",
+      "No puede utilizarse para financiar créditos extraordinarios o suplementos de crédito del sector público empresarial",
+      "No puede utilizarse para gastos de personal ni para el servicio de la deuda pública"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 43.2 de la Ley 1/2015 dispone que «en ningún caso podrá utilizarse el fondo de contingencia para financiar modificaciones destinadas a la cobertura de gastos o actuaciones que deriven de decisiones discrecionales de la administración, que carezcan de cobertura presupuestaria». Esta limitación garantiza que el Fondo solo cubra necesidades objetivas e imprevisibles, no la falta de planificación."
+  },
+  {
+    p: "El remanente del Fondo de Contingencia al final del ejercicio, ¿puede incorporarse a ejercicios posteriores según el artículo 43.4 de la Ley 1/2015?",
+    ops: [
+      "Sí, puede incorporarse íntegramente al ejercicio siguiente como crédito de libre disposición",
+      "Sí, pero solo hasta el 50 % del remanente y previa autorización del Consell",
+      "No, el remanente del crédito a final del ejercicio en el Fondo de Contingencia no podrá ser objeto de incorporación a ejercicios posteriores",
+      "Sí, pero únicamente para cubrir necesidades del mismo programa que originó el remanente"
+    ],
+    c: 2,
+    exp: "<strong>Respuesta correcta: C.</strong> El artículo 43.4 de la Ley 1/2015 establece de forma rotunda que «el remanente del crédito a final de cada ejercicio en el fondo de contingencia no podrá ser objeto de incorporación a ejercicios posteriores». A diferencia de otros créditos que sí pueden incorporarse bajo ciertas condiciones, el remanente del Fondo de Contingencia se pierde al cierre del ejercicio."
+  },
+  {
+    p: "El artículo 44.1 de la Ley 1/2015 enumera las figuras mediante las que pueden modificarse los créditos presupuestarios. ¿Cuáles son?",
+    ops: [
+      "Créditos extraordinarios, suplementos de crédito, transferencias, generaciones y ampliaciones",
+      "Incorporaciones de crédito; créditos extraordinarios y suplementos de crédito; ampliaciones de crédito; transferencias de crédito; y generaciones y anulaciones de crédito",
+      "Incorporaciones, ampliaciones, transferencias, anticipos de tesorería y generaciones de crédito",
+      "Créditos extraordinarios, suplementos de crédito, incorporaciones, retenciones y anulaciones"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 44.1 de la Ley 1/2015 enumera cinco figuras de modificación de crédito: a) incorporaciones de crédito; b) créditos extraordinarios y suplementos de crédito; c) ampliaciones de crédito; d) transferencias de crédito; e) generaciones y anulaciones de crédito. Los anticipos de tesorería (art. 51) no son una modalidad de modificación de crédito, sino un instrumento de financiación temporal."
+  },
+  {
+    p: "El artículo 44.5 de la Ley 1/2015 establece la obligatoriedad de publicar las modificaciones de crédito. ¿En qué publicación oficial deben publicarse?",
+    ops: [
+      "En el Boletín Oficial del Estado (BOE), por tratarse de una administración autonómica",
+      "En el Diari Oficial de la Comunitat Valenciana (DOGV)",
+      "En el Portal de Transparencia de la Generalitat, sin necesidad de publicación en diario oficial",
+      "Solo en la sede electrónica de la conselleria de hacienda, con acceso público garantizado"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 44.5 de la Ley 1/2015 establece que «las modificaciones de crédito se publicarán en el Diari Oficial de la Comunitat Valenciana». La publicidad de las modificaciones presupuestarias es una garantía de transparencia y control parlamentario y ciudadano."
+  },
+  {
+    p: "¿En qué supuestos pueden incorporarse créditos no vinculados a obligaciones reconocidas al cierre del ejercicio, según el artículo 45.1 de la Ley 1/2015?",
+    ops: [
+      "Siempre que lo autorice el Consell mediante acuerdo motivado y previo informe de la Intervención",
+      "Cuando así lo autorice una norma de rango legal; cuando se trate de créditos financiados con ingresos afectados; o cuando se trate de créditos derivados de retenciones para financiar créditos extraordinarios pendientes de aprobación por Les Corts",
+      "Cuando exista remanente de tesorería no afectado suficiente para cubrir el gasto previsto",
+      "Exclusivamente para gastos de inversión que no hayan podido ejecutarse por causas ajenas a la Administración"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 45.1 de la Ley 1/2015 establece tres supuestos en los que pueden incorporarse créditos no vinculados a obligaciones ya reconocidas: a) cuando lo autorice una norma de rango legal; b) créditos financiados con ingresos afectados a actuaciones determinadas; c) créditos derivados de retenciones efectuadas para la financiación de créditos extraordinarios o suplementos de crédito cuyas leyes de concesión hayan quedado pendientes de aprobación por Les Corts al final del ejercicio."
+  },
+  {
+    p: "Según el artículo 46 de la Ley 1/2015, ¿cuándo procede un crédito extraordinario en vez de un suplemento de crédito?",
+    ops: [
+      "El crédito extraordinario procede cuando el gasto es urgente; el suplemento, cuando no lo es",
+      "El crédito extraordinario procede cuando no existe crédito alguno en el presupuesto para ese gasto; el suplemento de crédito, cuando existe crédito pero es insuficiente",
+      "El crédito extraordinario lo concede el Consell; el suplemento de crédito, Les Corts",
+      "Ambas figuras son equivalentes y pueden utilizarse indistintamente en cualquier supuesto de gasto no previsto"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 46 de la Ley 1/2015 distingue con claridad: el crédito extraordinario procede cuando «no existiera crédito en el presupuesto de la Generalitat» para el gasto que no puede demorarse; el suplemento de crédito procede cuando el crédito «consignado fuera insuficiente». Ambas figuras solo son procedentes cuando no es posible la dotación a través de las otras figuras del artículo 44.1."
+  },
+  {
+    p: "El artículo 47.1 de la Ley 1/2015 atribuye competencias para conceder créditos extraordinarios y suplementos de crédito en organismos autónomos y entidades con presupuesto limitativo según umbrales porcentuales. ¿Cuáles son?",
+    ops: [
+      "Hasta el 10 %: titular de hacienda; del 10 % al 20 %: Consell; más del 20 %: Les Corts",
+      "Hasta el 5 %: titular de hacienda; del 5 % al 15 %: Consell (sin alcanzar el 15 %); más del 15 %: Les Corts mediante ley",
+      "Hasta el 3 %: titular de hacienda; del 3 % al 10 %: Consell; más del 10 %: Les Corts",
+      "Hasta el 5 %: Consell; del 5 % al 20 %: Les Corts mediante ley; más del 20 %: presupuesto de inversiones plurianuales"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 47.1 de la Ley 1/2015 establece tres tramos: hasta el 5 % de los créditos consignados, la concesión corresponde a la persona titular de la conselleria de hacienda; cuando exceda del 5 % sin alcanzar el 15 %, corresponde al Consell. Estos porcentajes se aplican de forma acumulada en el ejercicio. Cuando se supera el 15 %, la aprobación corresponde a Les Corts mediante ley."
+  },
+  {
+    p: "¿Qué son los créditos ampliables según el artículo 48.1 de la Ley 1/2015?",
+    ops: [
+      "Los créditos que pueden incrementarse libremente por decisión del titular de la conselleria afectada cuando lo exijan las necesidades del servicio",
+      "Los créditos destinados a atender obligaciones específicas del ejercicio que se relacionen taxativamente en la ley anual de presupuestos, cuya cuantía puede incrementarse hasta el importe que alcancen las respectivas obligaciones",
+      "Los créditos de carácter plurianual que se amplían automáticamente cada año según la inflación",
+      "Los créditos de inversión que se amplían cuando las obras superan el presupuesto inicial por causas imprevistas"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 48.1 de la Ley 1/2015 define los créditos ampliables como aquellos «destinados a atender obligaciones específicas del ejercicio que, de modo taxativo, se relacionen en ley anual de presupuestos de la Generalitat». Su cuantía puede incrementarse hasta el importe que alcancen las respectivas obligaciones. El carácter taxativo de la enumeración en la Ley de Presupuestos es la nota definitoria."
+  },
+  {
+    p: "El artículo 49.1.a) de la Ley 1/2015 establece una limitación para las transferencias de crédito con cargo a créditos de gastos de personal. ¿Cuándo pueden realizarse excepcionalmente?",
+    ops: [
+      "Nunca; los créditos de gastos de personal son absolutamente intransferibles",
+      "Cuando se justifique que la cantidad cuya transferencia se propone no está afectada a obligación alguna de pago, ni va a estarlo durante lo que reste de ejercicio, ni se ve afectado el régimen retributivo fijado en la ley de Presupuestos",
+      "Solo cuando el Consell lo autorice mediante acuerdo motivado y previo informe de la Intervención General",
+      "Cuando el crédito de personal derive de una plaza vacante que no va a cubrirse en el ejercicio"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 49.1.a) de la Ley 1/2015 no prohíbe de modo absoluto las transferencias desde créditos de personal, pero las condiciona a que se justifique que la cantidad «no está afectada a obligación alguna de pago, ni va a estarlo durante lo que reste de ejercicio, ni se ve afectado el régimen retributivo fijado en la correspondiente ley de Presupuestos». Son tres condiciones acumulativas."
+  },
+  {
+    p: "Según el artículo 49.1.c) de la Ley 1/2015, ¿cuándo pueden realizarse transferencias desde créditos de operaciones de capital a créditos de operaciones corrientes?",
+    ops: [
+      "Nunca; están absolutamente prohibidas por el principio de especialidad presupuestaria",
+      "Cuando el objeto de la modificación sea dotar crédito para el funcionamiento de nuevas inversiones o para operaciones corrientes que afecten a servicios públicos fundamentales",
+      "Solo cuando lo autorice Les Corts mediante ley de crédito extraordinario",
+      "Cuando el saldo de crédito de capital supere el 20 % del crédito inicial del programa"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 49.1.c) de la Ley 1/2015 establece que no podrán realizarse transferencias de capital a corrientes «excepto cuando el objeto de la modificación sea dotar crédito para el funcionamiento de nuevas inversiones o para operaciones corrientes que afecten a servicios públicos fundamentales». La regla general es la prohibición; la excepción requiere una de esas dos finalidades."
+  },
+  {
+    p: "El artículo 49.2 de la Ley 1/2015 prohíbe las transferencias que minoren créditos de subvenciones nominativas. ¿Cuándo se levanta esta prohibición?",
+    ops: [
+      "Cuando lo autorice el Consell mediante acuerdo motivado y se publique en el DOGV",
+      "Cuando, por cualquier causa, haya decaído el derecho del beneficiario a la percepción de la subvención",
+      "Cuando la subvención nominativa no haya sido convocada formalmente antes del 30 de junio del ejercicio",
+      "Cuando exista informe favorable de la Intervención General que acredite la imposibilidad de ejecutar la subvención"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 49.2 de la Ley 1/2015 prohíbe las transferencias que minoren créditos de subvenciones nominativas «a menos que, por cualquier causa, haya decaído el derecho a su percepción». Si el beneficiario pierde el derecho a la subvención por cualquier razón —renuncia, incumplimiento, etc.—, el crédito puede liberarse mediante transferencia."
+  },
+  {
+    p: "Según el artículo 50.1 de la Ley 1/2015, ¿cuáles son los ingresos imputados al presupuesto en el propio ejercicio que pueden dar lugar a generaciones de crédito?",
+    ops: [
+      "Solo los ingresos procedentes de aportaciones del Estado y de la Unión Europea",
+      "Aportaciones del Estado, UE u otras personas públicas o privadas; aportaciones entre sujetos del sector público; préstamos de otras administraciones; recursos afectados; ventas de bienes y servicios; enajenaciones de inmovilizado; reembolsos de préstamos; excesos de recaudación; y reintegros de pagos indebidos de presupuestos cerrados",
+      "Únicamente los ingresos afectados a actuaciones determinadas y los excesos de recaudación sobre la previsión inicial",
+      "Solo los ingresos procedentes de la Unión Europea y los reintegros de pagos indebidos"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 50.1 de la Ley 1/2015 enumera nueve categorías de ingresos que pueden dar lugar a generaciones de crédito: a) aportaciones del Estado, UE u otras personas; b) aportaciones entre sujetos del sector público; c) préstamos de otras administraciones; d) recursos afectados; e) ventas de bienes y servicios; f) enajenaciones de inmovilizado; g) reembolsos de préstamos; h) excesos de recaudación; i) reintegros de pagos indebidos de presupuestos cerrados."
+  },
+  {
+    p: "El artículo 51.1 de la Ley 1/2015 establece dos supuestos para que el Consell pueda conceder anticipos de tesorería. ¿Cuáles son?",
+    ops: [
+      "Cuando existan necesidades urgentes de tesorería y cuando lo solicite la Intervención General",
+      "Cuando el Consell haya aprobado el proyecto de concesión de crédito extraordinario o suplemento de crédito; o cuando se haya promulgado una norma con rango de ley que establezca obligaciones cuyo cumplimiento exija dicho crédito extraordinario o suplemento",
+      "Cuando el saldo de tesorería sea negativo y cuando exista aprobación de Les Corts",
+      "Solo cuando se haya promulgado una ley específica que autorice el anticipo para el gasto concreto"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 51.1 de la Ley 1/2015 prevé dos supuestos para los anticipos de tesorería: a) una vez aprobado por el Consell el proyecto de concesión de créditos extraordinarios o suplementos de crédito; b) cuando se haya promulgado una norma con rango de ley por la que se establezcan obligaciones cuyo cumplimiento exija la concesión de crédito extraordinario o suplemento de crédito. Ambos casos implican que ya existe o está en marcha el proceso para habilitar el crédito definitivo."
+  },
+
+  /* ══ PREGUNTAS DE SÍNTESIS ══ */
+  {
+    p: "Un organismo autónomo de la Generalitat necesita realizar un gasto urgente e imprevisto, pero el crédito presupuestario asignado es insuficiente. El aumento supone el 8 % de los créditos consignados en su presupuesto. ¿Quién es competente para conceder el suplemento de crédito?",
+    ops: [
+      "La persona titular de la conselleria de hacienda, por ser inferior al 10 %",
+      "El Consell, porque el porcentaje excede el 5 % atribuido al titular de hacienda pero no alcanza el 15 %",
+      "Les Corts, porque todo suplemento de crédito en organismos autónomos requiere ley",
+      "El titular de la conselleria a la que está adscrito el organismo, por razones de tutela"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> Según el artículo 47.1 de la Ley 1/2015, cuando el suplemento de crédito en un organismo autónomo supera el 5 % de los créditos consignados pero no alcanza el 15 %, la competencia corresponde al Consell. Un 8 % supera el umbral del titular de hacienda (5 %) pero no alcanza el del Consell (15 %), por lo que es el Consell el órgano competente."
+  },
+  {
+    p: "La Generalitat quiere adquirir un compromiso de gasto plurianual para la construcción de un edificio administrativo. El crédito inicial es de 10 millones de euros. ¿Cuál es la cantidad máxima imputable al ejercicio inmediatamente siguiente al de autorización?",
+    ops: [
+      "5 millones de euros (50 % del crédito inicial)",
+      "6 millones de euros (60 % del crédito inicial)",
+      "7 millones de euros (70 % del crédito inicial)",
+      "8 millones de euros (80 % del crédito inicial)"
+    ],
+    c: 2,
+    exp: "<strong>Respuesta correcta: C.</strong> El artículo 40.3 de la Ley 1/2015 establece que el gasto imputable al ejercicio inmediato siguiente no podrá exceder del 70 % del crédito inicial de la operación. Con un crédito inicial de 10 millones de euros, el máximo imputable al ejercicio inmediato siguiente es el 70 %, es decir, 7 millones de euros. Para el segundo ejercicio sería el 60 % (6 M€) y para el tercero y cuarto el 50 % (5 M€)."
+  },
+  {
+    p: "¿Cuál es la diferencia esencial entre la generación de crédito y la incorporación de crédito como modalidades de modificación presupuestaria en la Ley 1/2015?",
+    ops: [
+      "No hay diferencia; son dos denominaciones de la misma figura según el origen del crédito",
+      "La generación crea nuevo crédito vinculado a ingresos específicos producidos en el ejercicio; la incorporación traslada créditos no consumidos del ejercicio anterior al ejercicio vigente",
+      "La incorporación la aprueba el Consell; la generación la aprueba únicamente Les Corts",
+      "La generación solo opera en organismos autónomos; la incorporación solo en la Administración de la Generalitat"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> Son figuras distintas: la generación de crédito (art. 50) crea nuevo crédito en el ejercicio vigente vinculado a determinados ingresos producidos en ese mismo ejercicio (aportaciones, ventas, excesos de recaudación…). La incorporación de crédito (art. 45) permite trasladar al ejercicio vigente créditos del ejercicio anterior que no estaban vinculados a obligaciones ya reconocidas al cierre, en los supuestos taxativamente previstos. La primera amplía el presupuesto con nuevos ingresos; la segunda traslada remanentes del ejercicio anterior."
+  },
+  {
+    p: "Un Proyecto de Ley de Presupuestos de la Generalitat ha sido presentado a Les Corts pero no se aprueba antes del 31 de diciembre. ¿Qué consecuencia establece el artículo 35 de la Ley 1/2015 y qué créditos no quedarán prorrogados?",
+    ops: [
+      "El Consell puede gobernar con el 75 % del presupuesto anterior; no se prorrogan los créditos de inversión",
+      "Se prorroga automáticamente el presupuesto anterior hasta la aprobación del nuevo; no se prorrogan los créditos de programas o actuaciones que terminaron en el ejercicio prorrogado ni los de obligaciones que se extingan en él",
+      "El presupuesto queda en suspenso hasta que Les Corts reanuden sus sesiones; todos los créditos quedan bloqueados",
+      "El Consell aprueba un presupuesto provisional equivalente al 50 % del ejercicio anterior, aplicable hasta el 30 de junio"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> El artículo 35 de la Ley 1/2015 establece la prórroga automática del presupuesto anterior hasta la aprobación y publicación del nuevo en el DOGV (art. 35.1). No obstante, la prórroga no afecta a los créditos para gastos de «programas o actuaciones que terminen en el ejercicio cuyos presupuestos se prorrogan o para obligaciones que se extingan en el mismo» (art. 35.2). Además, la estructura orgánica se adaptará a la organización vigente sin alterar la cuantía total (art. 35.3)."
+  },
+  {
+    p: "¿Cuál es la diferencia entre los créditos extraordinarios (art. 46) y los anticipos de tesorería (art. 51) de la Ley 1/2015 en cuanto a su naturaleza y tramitación?",
+    ops: [
+      "Son la misma figura con distinto nombre; ambos requieren aprobación de Les Corts mediante ley",
+      "El crédito extraordinario modifica definitivamente el presupuesto mediante ley de Les Corts; el anticipo de tesorería es una habilitación excepcional y temporal del Consell para atender gastos inaplazables mientras se tramita el crédito extraordinario o suplemento definitivo",
+      "El anticipo de tesorería modifica el presupuesto de forma definitiva; el crédito extraordinario es solo provisional",
+      "Ambos son aprobados por el Consell, pero el crédito extraordinario requiere posterior ratificación de Les Corts en el plazo de un mes"
+    ],
+    c: 1,
+    exp: "<strong>Respuesta correcta: B.</strong> Son figuras distintas en naturaleza y tramitación: el crédito extraordinario (art. 46) es una modificación presupuestaria definitiva que requiere tramitación como proyecto de ley ante Les Corts, para casos en que no existe crédito o es insuficiente y el gasto no puede demorarse. El anticipo de tesorería (art. 51) es un mecanismo excepcional y temporal que el Consell puede conceder mientras se tramita el crédito extraordinario o suplemento definitivo, con el límite del 1 % de los créditos autorizados. El anticipo se cancela si Les Corts no aprueban el crédito extraordinario."
+  }
+];
+
+/* ── LÓGICA ── */
+let orden = [], respondidas = 0, aciertos = 0, errores = 0;
+const TOTAL = BANCO.length;
+
+document.getElementById('totalLabel').textContent = '📋 ' + TOTAL + ' preguntas';
+document.getElementById('barraNum').textContent = '0 / ' + TOTAL;
+
+function mezclar(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function actualizarBarra() {
+  document.getElementById('barraFill').style.width = ((respondidas / TOTAL) * 100) + '%';
+  document.getElementById('barraNum').textContent = respondidas + ' / ' + TOTAL;
+  document.getElementById('scoreOk').textContent = '✓ ' + aciertos;
+  document.getElementById('scoreKo').textContent = '✗ ' + errores;
+}
+
+function construirPreguntas() {
+  orden = mezclar([...Array(TOTAL).keys()]);
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '';
+  const letras = ['A', 'B', 'C', 'D'];
+
+  orden.forEach((idx, pos) => {
+    const q = BANCO[idx];
+    const opsOrden = mezclar([0, 1, 2, 3]);
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.id = 'card-' + pos;
+
+    const numDiv = document.createElement('div');
+    numDiv.className = 'card-num';
+    numDiv.textContent = 'Pregunta ' + (pos + 1);
+
+    const pregDiv = document.createElement('div');
+    pregDiv.className = 'card-pregunta';
+    pregDiv.textContent = q.p;
+
+    const opcionesDiv = document.createElement('div');
+    opcionesDiv.className = 'opciones';
+
+    opsOrden.forEach((opIdx, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'opcion';
+      btn.dataset.correcto = (opIdx === q.c) ? '1' : '0';
+      btn.dataset.pos = pos;
+      btn.innerHTML = '<span class="letra">' + letras[i] + '</span><span>' + q.ops[opIdx] + '</span>';
+      btn.addEventListener('click', onOpcionClick);
+      opcionesDiv.appendChild(btn);
+    });
+
+    const expDiv = document.createElement('div');
+    expDiv.className = 'explicacion';
+    expDiv.id = 'exp-' + pos;
+    expDiv.innerHTML = q.exp;
+
+    card.appendChild(numDiv);
+    card.appendChild(pregDiv);
+    card.appendChild(opcionesDiv);
+    card.appendChild(expDiv);
+    main.appendChild(card);
+  });
+
+  const res = document.createElement('div');
+  res.className = 'resultado';
+  res.id = 'resultado';
+  res.innerHTML = `
+    <div class="resultado-eyebrow">Resultado final</div>
+    <h2>Test completado</h2>
+    <div class="resultado-nota"><span id="rNota">-</span><span style="font-size:1.5rem;color:var(--texto-suave)">/10</span></div>
+    <div id="rBadge" class="calif-badge"></div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num" id="rOk" style="color:var(--verde)">-</div><div class="stat-lab">Correctas</div></div>
+      <div class="stat"><div class="stat-num" id="rKo" style="color:var(--rojo)">-</div><div class="stat-lab">Erróneas</div></div>
+      <div class="stat"><div class="stat-num" id="rPct">-</div><div class="stat-lab">% Acierto</div></div>
+    </div>
+    <p class="resultado-hint">Revisa las explicaciones en cada pregunta para reforzar los conceptos.</p>
+    <button class="btn btn-naranja" onclick="reiniciar()">🔄 Nuevo intento</button>
+  `;
+  main.appendChild(res);
+}
+
+function onOpcionClick(e) {
+  const btn = e.currentTarget;
+  const pos = parseInt(btn.dataset.pos);
+  const card = document.getElementById('card-' + pos);
+  card.querySelectorAll('.opcion').forEach(b => {
+    b.disabled = true;
+    if (b.dataset.correcto === '1') b.classList.add('correcta');
+    else if (b === btn) b.classList.add('incorrecta');
+  });
+  document.getElementById('exp-' + pos).classList.add('visible');
+  if (btn.dataset.correcto === '1') aciertos++; else errores++;
+  respondidas++;
+  actualizarBarra();
+  if (respondidas === TOTAL) mostrarResultado();
+}
+
+function mostrarResultado() {
+  const nota = ((aciertos / TOTAL) * 10).toFixed(1);
+  const pct = Math.round((aciertos / TOTAL) * 100);
+  let badge = '', color = '';
+  if (pct >= 90)      { badge = '🏆 Sobresaliente'; color = '#166534'; }
+  else if (pct >= 70) { badge = '✅ Notable';        color = '#1d4ed8'; }
+  else if (pct >= 50) { badge = '⚠️ Aprobado';      color = '#92400e'; }
+  else                { badge = '❌ Suspenso';       color = '#991b1b'; }
+  document.getElementById('rNota').textContent = nota;
+  document.getElementById('rOk').textContent = aciertos;
+  document.getElementById('rKo').textContent = errores;
+  document.getElementById('rPct').textContent = pct + '%';
+  const badgeEl = document.getElementById('rBadge');
+  badgeEl.textContent = badge;
+  badgeEl.style.cssText += `;background:${color}22;color:${color};border:1px solid ${color}44`;
+  const res = document.getElementById('resultado');
+  res.classList.add('visible');
+  setTimeout(() => res.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+function reiniciar() {
+  respondidas = 0; aciertos = 0; errores = 0;
+  actualizarBarra();
+  construirPreguntas();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+construirPreguntas();
+</script>
+</body>
+</html>
